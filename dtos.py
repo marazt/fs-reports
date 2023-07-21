@@ -5,6 +5,9 @@ from typing import Any
 
 @dataclass
 class Invoice:
+    """
+    Invoice.
+    """
     due_on: datetime
     id: str
     issued_on: datetime
@@ -24,6 +27,9 @@ class Invoice:
 
 @dataclass
 class Expense:
+    """
+    Expense.
+    """
     document_type: str
     due_on: datetime
     id: str
@@ -43,6 +49,9 @@ class Expense:
 
 @dataclass
 class Totals:
+    """
+    Totals.
+    """
     total: float
     subtotal: float
     tax: float
@@ -55,22 +64,28 @@ class Totals:
 
 @dataclass
 class Account:
+    """
+    Account.
+    """
     vat_number: int
     ufo_code: int
     prac_ufo: int
     id_data_box: str
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Account':
-        _vat_number = int(obj.get("vat_number"))
-        _ufo_code = int(obj.get("ufo_code"))
-        _prac_ufo = int(obj.get("prac_ufo"))
-        _id_data_box = str(obj.get("id_data_box"))
-        return Account(_vat_number, _ufo_code, _prac_ufo, _id_data_box)
+    def from_dict(obj: Any) -> "Account":
+        vat_number = int(obj.get("vat_number"))
+        ufo_code = int(obj.get("ufo_code"))
+        prac_ufo = int(obj.get("prac_ufo"))
+        id_data_box = str(obj.get("id_data_box"))
+        return Account(vat_number, ufo_code, prac_ufo, id_data_box)
 
 
 @dataclass
 class Address:
+    """
+    Address.
+    """
     city: str
     street_name: str
     street_number: int
@@ -79,44 +94,53 @@ class Address:
     country: str
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Address':
-        _city = str(obj.get("city"))
-        _street_name = str(obj.get("street_name"))
-        _street_number = int(obj.get("street_number"))
-        _street_orientation_number = str(obj.get("street_orientation_number"))
-        _zip_code = int(obj.get("zip_code"))
-        _country = str(obj.get("country"))
-        return Address(_city, _street_name, _street_number, _street_orientation_number, _zip_code, _country)
+    def from_dict(obj: Any) -> "Address":
+        city = str(obj.get("city"))
+        street_name = str(obj.get("street_name"))
+        street_number = int(obj.get("street_number"))
+        street_orientation_number = str(obj.get("street_orientation_number"))
+        zip_code = int(obj.get("zip_code"))
+        country = str(obj.get("country"))
+        return Address(city, street_name, street_number, street_orientation_number, zip_code, country)
 
 
 @dataclass
 class Fakturoid:
+    """
+    Fakturoid.
+    """
     slug: str
     api_key: str
     email: str
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Fakturoid':
-        _slug = str(obj.get("slug"))
-        _api_key = str(obj.get("api_key"))
-        _email = str(obj.get("email"))
-        return Fakturoid(_slug, _api_key, _email)
+    def from_dict(obj: Any) -> "Fakturoid":
+        slug = str(obj.get("slug"))
+        api_key = str(obj.get("api_key"))
+        email = str(obj.get("email"))
+        return Fakturoid(slug, api_key, email)
 
 
 @dataclass
 class Period:
+    """
+    Period.
+    """
     year: int
     month: int
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Period':
-        _year = int(obj.get("year"))
-        _month = int(obj.get("month"))
-        return Period(_year, _month)
+    def from_dict(obj: Any) -> "Period":
+        year = int(obj.get("year"))
+        month = int(obj.get("month"))
+        return Period(year, month)
 
 
 @dataclass
 class User:
+    """
+    User.
+    """
     first_name: str
     last_name: str
     title: str
@@ -125,27 +149,30 @@ class User:
     address: Address
 
     @staticmethod
-    def from_dict(obj: Any) -> 'User':
-        _first_name = str(obj.get("first_name"))
-        _last_name = str(obj.get("last_name"))
-        _title = str(obj.get("title"))
-        _phone_number = str(obj.get("phone_number"))
-        _email = str(obj.get("email"))
-        _address = Address.from_dict(obj.get("address"))
-        return User(_first_name, _last_name, _title, _phone_number, _email, _address)
+    def from_dict(obj: Any) -> "User":
+        first_name = str(obj.get("first_name"))
+        last_name = str(obj.get("last_name"))
+        title = str(obj.get("title"))
+        phone_number = str(obj.get("phone_number"))
+        email = str(obj.get("email"))
+        address = Address.from_dict(obj.get("address"))
+        return User(first_name, last_name, title, phone_number, email, address)
 
 
 @dataclass
 class Config:
+    """
+    Config.
+    """
     period: Period
     fakturoid: Fakturoid
     user: User
     account: Account
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Config':
-        _period = Period.from_dict(obj.get("period"))
-        _fakturoid = Fakturoid.from_dict(obj.get("fakturoid"))
-        _user = User.from_dict(obj.get("user"))
-        _account = Account.from_dict(obj.get("account"))
-        return Config(_period, _fakturoid, _user, _account)
+    def from_dict(obj: Any) -> "Config":
+        period = Period.from_dict(obj.get("period"))
+        fakturoid = Fakturoid.from_dict(obj.get("fakturoid"))
+        user = User.from_dict(obj.get("user"))
+        account = Account.from_dict(obj.get("account"))
+        return Config(period, fakturoid, user, account)

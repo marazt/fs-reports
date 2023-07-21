@@ -11,11 +11,11 @@ from fakturoid_processor import FakturoidProcessor, FakturoidAuth
 from logger import get_logger
 from processor import Processor
 
-logger: Logger = get_logger("fs-reports")
+_logger: Logger = get_logger("fs-reports")
 
 
 def main():
-    with open('config.json') as config_file:
+    with open("config.json", encoding="utf-8") as config_file:
         config: Config = Config.from_dict(json.load(config_file))
 
     processor = FakturoidProcessor(FakturoidAuth(
@@ -24,9 +24,9 @@ def main():
         slug=config.fakturoid.slug
     ))
 
-    _generate_report(processor, config)
+    _generate_report(processor, config, _logger)
 
-    logger.info('Now upload the report via https://adisspr.mfcr.cz/dpr/adis/idpr_epo/epo2/uvod/vstup_expert.faces')
+    _logger.info("Now upload the report via https://adisspr.mfcr.cz/dpr/adis/idpr_epo/epo2/uvod/vstup_expert.faces")
 
 
 def _print_info(logger: Logger, period: Period, invoices: list[Invoice], expenses: list[Expense], totals: Totals):
@@ -49,11 +49,12 @@ def _print_info(logger: Logger, period: Period, invoices: list[Invoice], expense
 
 def _generate_report(
         processor: Processor,
-        config: Config
+        config: Config,
+        logger: Logger
 ):
     jinja_env = Environment(
-        loader=FileSystemLoader('templates'),
-        autoescape=select_autoescape(['xml']),
+        loader=FileSystemLoader("templates"),
+        autoescape=select_autoescape(["xml"]),
         undefined=StrictUndefined
     )
     period = config.period
@@ -70,7 +71,7 @@ def _generate_report(
     template = jinja_env.get_template("dphdp3_template.xml")
     signed_on = date.today().strftime("%d.%m.%Y")
 
-    with open(f"./reports/dphdp3_{period.year}_{period.month}m.xml", "w") as f:
+    with open(f"./reports/dphdp3_{period.year}_{period.month}m.xml", "w", encoding="utf-8") as f:
         f.write(template.render(invoices=invoices,
                                 expenses=expenses,
                                 totals=totals,
@@ -80,8 +81,8 @@ def _generate_report(
                                 user=config.user,
                                 account=config.account))
 
-    template = jinja_env.get_template('dphkh1_template.xml')
-    with open(f"./reports/dphkh1_{period.year}_{period.month}m.xml", "w") as f:
+    template = jinja_env.get_template("dphkh1_template.xml")
+    with open(f"./reports/dphkh1_{period.year}_{period.month}m.xml", "w", encoding="utf-8") as f:
         f.write(template.render(invoices=invoices,
                                 expenses=expenses,
                                 totals=totals,
@@ -92,5 +93,5 @@ def _generate_report(
                                 account=config.account))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
