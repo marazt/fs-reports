@@ -168,6 +168,7 @@ class Config:
     fakturoid: Fakturoid
     user: User
     account: Account
+    output: str
 
     @staticmethod
     def from_dict(obj: Any) -> "Config":
@@ -175,4 +176,5 @@ class Config:
         fakturoid = Fakturoid.from_dict(obj.get("fakturoid"))
         user = User.from_dict(obj.get("user"))
         account = Account.from_dict(obj.get("account"))
-        return Config(period, fakturoid, user, account)
+        output = str(obj.get("output"))
+        return Config(period, fakturoid, user, account, output)

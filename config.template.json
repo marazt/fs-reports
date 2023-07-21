@@ -28,5 +28,6 @@
     "ufo_code": 450,
     "prac_ufo": 2113,
     "id_data_box": "SET_ME"
-  }
+  },
+  "output": "SET_ME"
 }

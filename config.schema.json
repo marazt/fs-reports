@@ -119,10 +119,14 @@
       ]
     }
   },
+  "output": {
+    "type": "string"
+  },
   "required": [
     "period",
     "fakturoid",
     "user",
-    "account"
+    "account",
+    "output"
   ]
 }

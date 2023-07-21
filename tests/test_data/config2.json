@@ -1,0 +1,33 @@
+{
+  "period": {
+    "year": 2023,
+    "month": 4
+  },
+  "fakturoid": {
+    "slug": "user",
+    "api_key": "apikey",
+    "email": "user@example.org"
+  },
+  "user": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "title": "",
+    "phone_number": "123456432",
+    "email": "user@example.org",
+    "address": {
+      "city": "NYC",
+      "street_name": "Jersey",
+      "street_number": 4312,
+      "street_orientation_number": "",
+      "zip_code": 235235,
+      "country": "USA"
+    }
+  },
+  "account": {
+    "vat_number": 2151515135,
+    "ufo_code": 450,
+    "prac_ufo": 2113,
+    "id_data_box": "xdgdgdfgg"
+  },
+  "output": "./test_reports"
+}
