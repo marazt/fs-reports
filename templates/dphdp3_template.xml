@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Pisemnost nazevSW="Fakturoid">
+    <DPHDP3 verzePis="01.02.15">
+        <VetaD
+                c_okec="620000"
+                d_poddp="{{ signed_on }}"
+                dapdph_forma="B"
+                dokument="DP3"
+                k_uladis="DPH"
+                mesic="{{ period.month }}"
+                rok="{{ period.year }}"
+                trans="A"
+                typ_platce="P"
+        />
+        <VetaP
+                c_orient="{{ user.address.street_orientation_number }}"
+                c_pop="{{ user.address.street_number }}"
+                c_pracufo="{{ account.prac_ufo }}"
+                c_telef="{{ user.phone_number }}"
+                c_ufo="{{ account.ufo_code }}"
+                dic="{{ account.vat_number }}"
+                email="{{ user.email }}"
+                jmeno="{{ user.first_name }}"
+                naz_obce="{{ user.address.city }}"
+                prijmeni="{{ user.last_name }}"
+                psc="{{ user.address.zip_code }}"
+                stat="{{ user.address.country | upper }}"
+                titul="{{ user.title }}"
+                typ_ds="F"
+                ulice="{{ user.address.street_name }}"
+        />
+        <Veta1
+                dan5="0.0"
+                dan23="{{ totals.tax }}"
+                dan_psl5_e="0.0"
+                dan_psl5_z="0.0"
+                dan_psl23_e="0.0"
+                dan_psl23_z="0.0"
+                dan_rpren5="0.0"
+                dan_rpren23="0.0"
+                obrat5="0.0"
+                obrat23="{{ totals.subtotal }}"
+                p_sl5_e="0.0"
+                p_sl5_z="0.0"
+                p_sl23_e="0.0"
+                p_sl23_z="0.0"
+                rez_pren5="0.0"
+                rez_pren23="0.0"
+        />
+        <Veta2
+                pln_ost="0.0"
+                pln_rez_pren="0.0"
+                pln_sluzby="0.0"
+                pln_zaslani="0.0"
+        />
+        <Veta4
+                nar_zdp5="0.0"
+                nar_zdp23="0.0"
+                od_zdp5="0.0"
+                od_zdp23="0.0"
+                odp_sum_kr="0"
+                odp_sum_nar="{{ totals.supplier_tax }}"
+                odp_tuz5_nar="0.0"
+                odp_tuz23_nar="{{ totals.supplier_tax }}"
+                pln5="0.0"
+                pln23="{{ totals.supplier_subtotal }}"
+        />
+        <Veta6
+                dan_zocelk="{{ totals.tax }}"
+                dano="0"
+                dano_da="{{ totals.tax_diff }}"
+                dano_no="0"
+                odp_zocelk="{{ totals.supplier_tax }}"
+        />
+    </DPHDP3>
+</Pisemnost>

@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "period": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer"
+        },
+        "month": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "year",
+        "month"
+      ]
+    },
+    "fakturoid": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string"
+        },
+        "api_key": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "slug",
+        "api_key",
+        "email"
+      ]
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            },
+            "street_name": {
+              "type": "string"
+            },
+            "street_number": {
+              "type": "integer"
+            },
+            "street_orientation_number": {
+              "type": "string"
+            },
+            "zip_code": {
+              "type": "integer"
+            },
+            "country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city",
+            "street_name",
+            "street_number",
+            "street_orientation_number",
+            "zip_code",
+            "country"
+          ]
+        }
+      },
+      "required": [
+        "first_name",
+        "last_name",
+        "title",
+        "phone_number",
+        "email",
+        "address"
+      ]
+    },
+    "account": {
+      "type": "object",
+      "properties": {
+        "vat_number": {
+          "type": "integer"
+        },
+        "ufo_code": {
+          "type": "integer"
+        },
+        "prac_ufo": {
+          "type": "integer"
+        },
+        "id_data_box": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "vat_number",
+        "ufo_code",
+        "prac_ufo",
+        "id_data_box"
+      ]
+    }
+  },
+  "required": [
+    "period",
+    "fakturoid",
+    "user",
+    "account"
+  ]
+}

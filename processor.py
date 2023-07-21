@@ -1,0 +1,32 @@
+from dtos import Invoice, Expense, Period, Totals
+
+
+class Processor:
+    def __init__(self):
+        pass
+
+    def process_invoices(self, period: Period) -> list[Invoice]:
+        pass
+
+    def process_expenses(self, period: Period) -> list[Expense]:
+        pass
+
+    @staticmethod
+    def generate_totals(invoices: list[Invoice], expenses: list[Expense]) -> Totals:
+        total = sum(i.total for i in invoices)
+        subtotal = sum(i.subtotal for i in invoices)
+        tax = sum(i.tax for i in invoices)
+        supplier_total = sum(i.total for i in expenses)
+        supplier_subtotal = sum(i.subtotal for i in expenses)
+        supplier_tax = sum(i.tax for i in expenses)
+
+        return Totals(
+            total=total,
+            subtotal=subtotal,
+            tax=tax,
+            supplier_total=supplier_total,
+            supplier_subtotal=supplier_subtotal,
+            supplier_tax=supplier_tax,
+            total_diff=total - supplier_total,
+            tax_diff=tax - supplier_tax
+        )

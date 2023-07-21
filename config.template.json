@@ -1,0 +1,32 @@
+{
+  "period": {
+    "year": 2023,
+    "month": 6
+  },
+  "fakturoid": {
+    "slug": "SET_ME",
+    "api_key": "SET_ME",
+    "email": "SET_ME"
+  },
+  "user": {
+    "first_name": "SET_ME",
+    "last_name": "SET_ME",
+    "title": "SET_ME",
+    "phone_number": "SET_ME",
+    "email": "SET_ME",
+    "address": {
+      "city": "SET_ME",
+      "street_name": "SET_ME",
+      "street_number": 123,
+      "street_orientation_number": "",
+      "zip_code": 12345,
+      "country": "ČESKÁ REPUBLIKA"
+    }
+  },
+  "account": {
+    "vat_number": 123456789,
+    "ufo_code": 450,
+    "prac_ufo": 2113,
+    "id_data_box": "SET_ME"
+  }
+}

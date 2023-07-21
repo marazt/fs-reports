@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Pisemnost nazevSW="Fakturoid">
+    <DPHKH1 verzePis="03.01.03">
+        <VetaD
+                d_poddp="{{ signed_on }}"
+                dokument="KH1"
+                k_uladis="DPH"
+                khdph_forma="B"
+                mesic="{{ period.month }}"
+                rok="{{ period.year }}"
+        />
+        <VetaP
+                c_orient=""
+                c_pop="{{ user.address.street_number }}"
+                c_pracufo="{{ account.prac_ufo }}"
+                c_telef="{{ user.phone_number }}"
+                c_ufo="{{ account.ufo_code }}"
+                dic="{{ account.vat_number }}"
+                email="{{ user.email }}"
+                id_dats="{{ account.id_data_box }}"
+                jmeno="{{ user.first_name }}"
+                naz_obce="{{ user.address.city }}"
+                prijmeni="{{ user.last_name }}"
+                psc="{{ user.address.zip_code }}"
+                stat="{{ user.address.country | upper }}"
+                titul="{{ user.title }}"
+                typ_ds="F"
+                ulice="{{ user.address.street_name }}"
+        />
+        {% for invoice in invoices %}
+        <VetaA4
+                c_evid_dd="{{ invoice.number }}"
+                dan1="{{ invoice.tax }}"
+                dan2="0.0"
+                dan3="0.0"
+                dic_odb="{{ invoice.client_registration_number }}"
+                dppd="{{ invoice.taxable_fulfillment_due.strftime('%d.%m.%Y') }}"
+                kod_rezim_pl="0"
+                zakl_dane1="{{ invoice.subtotal }}"
+                zakl_dane2="0.0"
+                zakl_dane3="0.0"
+                zdph_44="N"
+        />
+        {% endfor %}
+        <VetaA5
+                dan1="0"
+                dan2="0"
+                dan3="0"
+                zakl_dane1="0"
+                zakl_dane2="0"
+                zakl_dane3="0"
+        />
+        {% for expense in expenses %}
+        <VetaB2
+                c_evid_dd="{{ expense.original_number }}"
+                dan1="{{ expense.tax }}"
+                dan2="0.0"
+                dan3="0.0"
+                dic_dod="{{ expense.supplier_registration_number }}"
+                dppd="{{ expense.taxable_fulfillment_due.strftime('%d.%m.%Y') }}"
+                pomer="N"
+                zakl_dane1="{{ expense.subtotal }}"
+                zakl_dane2="0.0"
+                zakl_dane3="0.0"
+                zdph_44="N"
+        />
+        {% endfor %}
+        <VetaB3
+                dan1="0"
+                dan2="0"
+                dan3="0"
+                zakl_dane1="0"
+                zakl_dane2="0"
+                zakl_dane3="0"
+        />
+        <VetaC
+                celk_zd_a2="0"
+                obrat5="0.0"
+                obrat23="{{ totals.subtotal }}"
+                pln5="0.0"
+                pln23="{{ totals.supplier_subtotal }}"
+                pln_rez_pren="0"
+                rez_pren5="0"
+                rez_pren23="0"
+        />
+    </DPHKH1>
+</Pisemnost>
