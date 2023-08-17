@@ -4,6 +4,7 @@ from datetime import datetime
 
 import requests
 from requests.auth import HTTPBasicAuth
+from typing import List
 
 from dtos import Period, Invoice, Expense
 from processor import Processor
@@ -25,15 +26,15 @@ class FakturoidProcessor(Processor):
         super().__init__()
         self._auth = auth
 
-    def process_invoices(self, period: Period) -> list[Invoice]:
+    def process_invoices(self, period: Period) -> List[Invoice]:
         data = self._get_all_invoices_for(period, self._auth)
         return FakturoidProcessor.transform_invoices(data)
 
-    def process_expenses(self, period: Period) -> list[Expense]:
+    def process_expenses(self, period: Period) -> List[Expense]:
         data = self._get_all_expenses_for(period, self._auth)
         return FakturoidProcessor.transform_expenses(data)
 
-    def _get_all_invoices_for(self, period: Period, auth: FakturoidAuth) -> list[dict]:
+    def _get_all_invoices_for(self, period: Period, auth: FakturoidAuth) -> List[dict]:
         url = f"https://app.fakturoid.cz/api/v2/accounts/{auth.slug}/invoices.json"
         r = requests.get(url, auth=HTTPBasicAuth(auth.email, auth.apikey), timeout=2)
         invoices_all = r.json()
@@ -41,7 +42,7 @@ class FakturoidProcessor(Processor):
         invoices = list(filter(lambda i: self._is_in_period(i, period), invoices_all))
         return invoices
 
-    def _get_all_expenses_for(self, period: Period, auth: FakturoidAuth) -> list[dict]:
+    def _get_all_expenses_for(self, period: Period, auth: FakturoidAuth) -> List[dict]:
         url = f"https://app.fakturoid.cz/api/v2/accounts/{auth.slug}/expenses.json"
         r = requests.get(url, auth=HTTPBasicAuth(auth.email, auth.apikey), timeout=2)
         expenses_all = r.json()
@@ -54,7 +55,7 @@ class FakturoidProcessor(Processor):
         return taxable_fulfillment_due.year == period.year and taxable_fulfillment_due.month == period.month
 
     @staticmethod
-    def transform_expenses(expenses: list[dict]) -> list[Expense]:
+    def transform_expenses(expenses: List[dict]) -> List[Expense]:
         return [
             Expense(
                 document_type=expense["document_type"],
@@ -76,7 +77,7 @@ class FakturoidProcessor(Processor):
         ]
 
     @staticmethod
-    def transform_invoices(invoices: list[dict]) -> list[Invoice]:
+    def transform_invoices(invoices: List[dict]) -> List[Invoice]:
         return [
             Invoice(
                 due_on=datetime.strptime(invoice["due_on"], "%Y-%m-%d"),

@@ -1,3 +1,5 @@
+from typing import List
+
 from dtos import Invoice, Expense, Period, Totals
 
 
@@ -9,14 +11,14 @@ class Processor:
     def __init__(self):
         pass
 
-    def process_invoices(self, period: Period) -> list[Invoice]:
+    def process_invoices(self, period: Period) -> List[Invoice]:
         """
         Invoice processing.
         :param period:
         :return:
         """
 
-    def process_expenses(self, period: Period) -> list[Expense]:
+    def process_expenses(self, period: Period) -> List[Expense]:
         """
         Expenses processing
         :param period:
@@ -24,7 +26,7 @@ class Processor:
         """
 
     @staticmethod
-    def generate_totals(invoices: list[Invoice], expenses: list[Expense]) -> Totals:
+    def generate_totals(invoices: List[Invoice], expenses: List[Expense]) -> Totals:
         """
         Totals stats generator.
         :param invoices:

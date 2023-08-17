@@ -3,6 +3,7 @@ from datetime import date
 from logging import Logger
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape, StrictUndefined
+from typing import List
 
 from src.dtos import Period, Invoice, Expense, Totals, Config
 from src.processor import Processor
@@ -12,7 +13,7 @@ def generate_report(
         processor: Processor,
         config: Config,
         logger: Logger
-):
+) -> Totals:
     jinja_env = Environment(
         loader=FileSystemLoader("../templates"),
         autoescape=select_autoescape(["xml"]),
@@ -53,8 +54,10 @@ def generate_report(
                                                                       account=config.account),
                  logger)
 
+    return totals
 
-def _print_info(logger: Logger, period: Period, invoices: list[Invoice], expenses: list[Expense], totals: Totals):
+
+def _print_info(logger: Logger, period: Period, invoices: List[Invoice], expenses: List[Expense], totals: Totals):
     logger.info(f"Report for period {period.year}-{period.month}.")
     logger.info(f"Invoices ({len(invoices)}):")
     for invoice in invoices:

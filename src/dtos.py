@@ -71,6 +71,7 @@ class Account:
     ufo_code: int
     prac_ufo: int
     id_data_box: str
+    fs_tax_account: str
 
     @staticmethod
     def from_dict(obj: Any) -> "Account":
@@ -78,7 +79,8 @@ class Account:
         ufo_code = int(obj.get("ufo_code"))
         prac_ufo = int(obj.get("prac_ufo"))
         id_data_box = str(obj.get("id_data_box"))
-        return Account(vat_number, ufo_code, prac_ufo, id_data_box)
+        fs_tax_account = str(obj.get("fs_tax_account"))
+        return Account(vat_number, ufo_code, prac_ufo, id_data_box, fs_tax_account)
 
 
 @dataclass

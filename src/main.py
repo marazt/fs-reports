@@ -1,10 +1,13 @@
 import json
+import subprocess
+from datetime import datetime
 from logging import Logger
 
-from dtos import Config
+from dtos import Config, Totals
 from fakturoid_processor import FakturoidProcessor, FakturoidAuth
 from logger import get_logger
 from src.generator import generate_report
+from src.qr_payment import generate_qr_code
 
 _logger: Logger = get_logger("fs-reports")
 
@@ -19,10 +22,21 @@ def main():
         slug=config.fakturoid.slug
     ))
 
-    generate_report(processor, config, _logger)
+    totals: Totals = generate_report(processor, config, _logger)
 
-    _logger.info("Now upload the report via https://adisspr.mfcr.cz/dpr/adis/idpr_epo/epo2/uvod/vstup_expert.faces")
+    code_file_name = f"{config.output}/qr_code_{config.period.year}_{config.period.month}.svg"
+    generate_qr_code(
+        account=config.account.fs_tax_account,
+        amount=totals.tax_diff,
+        vs=config.account.vat_number,
+        message="",
+        due_date=datetime.now(),
+        file_name=code_file_name
+    )
+    subprocess.call(f"open {code_file_name}", shell=True)
 
+
+_logger.info("Now upload the report via https://adisspr.mfcr.cz/dpr/adis/idpr_epo/epo2/uvod/vstup_expert.faces")
 
 if __name__ == "__main__":
     main()
