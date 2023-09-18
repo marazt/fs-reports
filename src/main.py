@@ -24,16 +24,19 @@ def main():
 
     totals: Totals = generate_report(processor, config, _logger)
 
-    code_file_name = f"{config.output}/qr_code_{config.period.year}_{config.period.month}.svg"
+    code_file_name = f"{config.output}/qr_code_{config.period.year}_{config.period.month}"
+    code_file_name_svg = f"{code_file_name}.svg"
+
     generate_qr_code(
         account=config.account.fs_tax_account,
         amount=totals.tax_diff,
         vs=config.account.vat_number,
         message="",
         due_date=datetime.now(),
-        file_name=code_file_name
+        file_name=code_file_name_svg
     )
-    subprocess.call(f"open {code_file_name}", shell=True)
+
+    subprocess.call(f"open {code_file_name_svg}", shell=True)
 
 
 _logger.info("Now upload the report via https://adisspr.mfcr.cz/dpr/adis/idpr_epo/epo2/uvod/vstup_expert.faces")

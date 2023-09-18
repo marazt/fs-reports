@@ -62,15 +62,15 @@ def _print_info(logger: Logger, period: Period, invoices: List[Invoice], expense
     logger.info(f"Invoices ({len(invoices)}):")
     for invoice in invoices:
         logger.info(
-            f"\tInvoice {invoice.id}, {invoice.html_url} for {invoice.total} ({invoice.subtotal} + {invoice.tax}).")
+            f"\tInvoice {invoice.id}, {invoice.html_url} for {invoice.total} ({invoice.subtotal} base + {invoice.tax} tax).")
 
     logger.info(f"Expenses ({len(expenses)}):")
     for expense in expenses:
         logger.info(
-            f"\tExpense {expense.id}, {expense.html_url} for {expense.total} ({expense.subtotal} + {expense.tax}).")
+            f"\tExpense {expense.id}, {expense.html_url} for {expense.total} ({expense.subtotal} base + {expense.tax} tax).")
 
-    logger.info(f"Invoices total: {totals.total} ({totals.subtotal} + {totals.tax}).")
-    logger.info(f"Expenses total: {totals.supplier_total} ({totals.supplier_subtotal} + {totals.supplier_tax}).")
+    logger.info(f"Invoices total: {totals.total} ({totals.subtotal} base + {totals.tax} tax).")
+    logger.info(f"Expenses total: {totals.supplier_total} ({totals.supplier_subtotal} base + {totals.supplier_tax} tax).")
     logger.info(f"Diff: {totals.total_diff}.")
     logger.info(f"Tax diff: {totals.tax_diff}.")
 
