@@ -78,4 +78,4 @@ def _print_info(logger: Logger, period: Period, invoices: List[Invoice], expense
 def _save_report(report_filename: str, data: str, logger: Logger):
     with open(report_filename, "w", encoding="utf-8") as f:
         f.write(data)
-    logger.info(f"Report saved into {report_filename}.")
+    logger.info(f"Report saved into file://{report_filename}.")
