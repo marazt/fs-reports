@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
+from typing import Any, List
 
 
 @dataclass
@@ -112,15 +112,17 @@ class Fakturoid:
     Fakturoid.
     """
     slug: str
-    api_key: str
+    client_id: str
+    client_secret: str
     email: str
 
     @staticmethod
     def from_dict(obj: Any) -> "Fakturoid":
         slug = str(obj.get("slug"))
-        api_key = str(obj.get("api_key"))
+        client_id = str(obj.get("client_id"))
+        client_secret = str(obj.get("client_secret"))
         email = str(obj.get("email"))
-        return Fakturoid(slug, api_key, email)
+        return Fakturoid(slug, client_id, client_secret, email)
 
 
 @dataclass
@@ -162,6 +164,30 @@ class User:
 
 
 @dataclass
+class ValidClientVatNumber:
+    name: str
+    number: str
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'ValidClientVatNumber':
+        _name = str(obj.get("name"))
+        _number = str(obj.get("number"))
+        return ValidClientVatNumber(_name, _number)
+
+
+@dataclass
+class ValidSupplierVatNumber:
+    name: str
+    number: str
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'ValidSupplierVatNumber':
+        _name = str(obj.get("name"))
+        _number = str(obj.get("number"))
+        return ValidSupplierVatNumber(_name, _number)
+
+
+@dataclass
 class Config:
     """
     Config.
@@ -171,6 +197,8 @@ class Config:
     user: User
     account: Account
     output: str
+    valid_client_vat_numbers: List[ValidClientVatNumber]
+    valid_supplier_vat_numbers: List[ValidSupplierVatNumber]
 
     @staticmethod
     def from_dict(obj: Any) -> "Config":
@@ -179,4 +207,7 @@ class Config:
         user = User.from_dict(obj.get("user"))
         account = Account.from_dict(obj.get("account"))
         output = str(obj.get("output"))
-        return Config(period, fakturoid, user, account, output)
+        valid_client_vat_numbers = [ValidClientVatNumber.from_dict(y) for y in obj.get("valid_client_vat_numbers")]
+        valid_suppliers_vat_numbers = [ValidSupplierVatNumber.from_dict(y) for y in
+                                       obj.get("valid_supplier_vat_numbers")]
+        return Config(period, fakturoid, user, account, output, valid_client_vat_numbers, valid_suppliers_vat_numbers)

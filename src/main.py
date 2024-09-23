@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 from datetime import datetime
 from logging import Logger
@@ -17,21 +18,27 @@ def main():
         config: Config = Config.from_dict(json.load(config_file))
 
     processor = FakturoidProcessor(FakturoidAuth(
-        apikey=config.fakturoid.api_key,
+        client_id=config.fakturoid.client_id,
+        client_secret=config.fakturoid.client_secret,
         email=config.fakturoid.email,
         slug=config.fakturoid.slug
     ))
 
     totals: Totals = generate_report(processor, config, _logger)
+    report_dir = f"{config.period.year}_{config.period.month}"
 
-    code_file_name = f"{config.output}/qr_code_{config.period.year}_{config.period.month}"
+    try:
+        os.makedirs(report_dir)
+    except FileExistsError:
+        pass
+    code_file_name = f"{config.output}/{report_dir}/qr_code_{config.period.year}_{config.period.month}"
     code_file_name_svg = f"{code_file_name}.svg"
 
     generate_qr_code(
         account=config.account.fs_tax_account,
         amount=totals.tax_diff,
         vs=config.account.vat_number,
-        message="",
+        message=f"DPH {config.period.year}/{config.period.month}",
         due_date=datetime.now(),
         file_name=code_file_name_svg
     )

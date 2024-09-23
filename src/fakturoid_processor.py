@@ -1,18 +1,22 @@
 import math
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
+from typing import List, Optional
 
 import requests
-from requests.auth import HTTPBasicAuth
-from typing import List
+from requests.auth import _basic_auth_str
 
 from dtos import Period, Invoice, Expense
 from processor import Processor
 
 
+# from requests.auth import basic_auth_str
+
+
 @dataclass
 class FakturoidAuth:
-    apikey: str
+    client_id: str
+    client_secret: str
     email: str
     slug: str
 
@@ -25,6 +29,10 @@ class FakturoidProcessor(Processor):
     def __init__(self, auth: FakturoidAuth):
         super().__init__()
         self._auth = auth
+        self._base_url = "https://app.fakturoid.cz/api/v3"
+        self._accounts_url = f"{self._base_url}/accounts"
+        self._token: Optional[str] = None
+        self._expires_at: Optional[datetime] = None
 
     def process_invoices(self, period: Period) -> List[Invoice]:
         data = self._get_all_invoices_for(period, self._auth)
@@ -34,17 +42,45 @@ class FakturoidProcessor(Processor):
         data = self._get_all_expenses_for(period, self._auth)
         return FakturoidProcessor.transform_expenses(data)
 
+    def _get_url(self, auth: FakturoidAuth, suffix: str):
+        return f"{self._accounts_url}/{auth.slug}/{suffix}"
+
+    def _get_token(self, auth: FakturoidAuth):
+        now = datetime.now()
+        if self._token is not None and self._expires_at is not None and self._expires_at > now:
+            return self._token
+
+        url = f"{self._base_url}/oauth/token"
+        r = requests.post(
+            url,
+            headers={
+                "User-Agent": f"fsreport ({auth.email})",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": _basic_auth_str(auth.client_id, auth.client_secret)
+            },
+            json={"grant_type": "client_credentials"},
+            timeout=2
+        )
+        data = r.json()
+        self._token = data["access_token"]
+        self._expires_at = now + timedelta(seconds=data["expires_in"])
+        return self._token
+
+    def _create_headers_with_token(self):
+        return {
+            "Authorization": f"Bearer {self._get_token(self._auth)}",
+        }
+
     def _get_all_invoices_for(self, period: Period, auth: FakturoidAuth) -> List[dict]:
-        url = f"https://app.fakturoid.cz/api/v2/accounts/{auth.slug}/invoices.json"
-        r = requests.get(url, auth=HTTPBasicAuth(auth.email, auth.apikey), timeout=2)
+        r = requests.get(self._get_url(auth, "invoices.json"), headers=self._create_headers_with_token(), timeout=2)
         invoices_all = r.json()
 
         invoices = list(filter(lambda i: self._is_in_period(i, period), invoices_all))
         return invoices
 
     def _get_all_expenses_for(self, period: Period, auth: FakturoidAuth) -> List[dict]:
-        url = f"https://app.fakturoid.cz/api/v2/accounts/{auth.slug}/expenses.json"
-        r = requests.get(url, auth=HTTPBasicAuth(auth.email, auth.apikey), timeout=2)
+        r = requests.get(self._get_url(auth, "expenses.json"), headers=self._create_headers_with_token(), timeout=2)
         expenses_all = r.json()
 
         expenses = list(filter(lambda i: self._is_in_period(i, period), expenses_all))
