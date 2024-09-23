@@ -70,6 +70,8 @@ def generate_report(
                  logger)
 
     logger.info(f"Reports saved into file://{report_dir}.")
+    logger.info(f"Control report: https://adisspr.mfcr.cz/pmd/epo/novy/DPH_KH1.")
+    logger.info(f"VAT: https://adisspr.mfcr.cz/pmd/epo/novy/DPH_DP3.")
 
     return totals
 
