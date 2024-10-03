@@ -7,7 +7,7 @@ from logging import Logger
 from dtos import Config, Totals
 from fakturoid_processor import FakturoidProcessor, FakturoidAuth
 from logger import get_logger
-from src.generator import generate_report
+from src.generator import generate_report, get_report_dir_name
 from src.qr_payment import generate_qr_code
 
 _logger: Logger = get_logger("fs-reports")
@@ -25,20 +25,20 @@ def main():
     ))
 
     totals: Totals = generate_report(processor, config, _logger)
-    report_dir = f"{config.period.year}_{config.period.month}"
+    report_dir = get_report_dir_name(config)
 
     try:
         os.makedirs(report_dir)
     except FileExistsError:
         pass
-    code_file_name = f"{config.output}/{report_dir}/qr_code_{config.period.year}_{config.period.month}"
+    code_file_name = f"{report_dir}/qr_code_{config.period.year}_{config.period.month}"
     code_file_name_svg = f"{code_file_name}.svg"
 
     generate_qr_code(
         account=config.account.fs_tax_account,
         amount=totals.tax_diff,
         vs=config.account.vat_number,
-        message=f"DPH {config.period.year}/{config.period.month}",
+        message=f"DPH {config.period.year}/{config.period.month:02}",
         due_date=datetime.now(),
         file_name=code_file_name_svg
     )

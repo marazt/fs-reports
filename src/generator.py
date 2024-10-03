@@ -46,7 +46,7 @@ def generate_report(
         return
 
     signed_on = date.today().strftime("%d.%m.%Y")
-    report_dir = f"{config.output}/{period.year}_{period.month}"
+    report_dir = get_report_dir_name(config)
     _save_report(report_dir, f"dphdp3_{period.year}_{period.month}m.xml",
                  jinja_env.get_template("dphdp3_template.xml").render(invoices=invoices,
                                                                       expenses=expenses,
@@ -74,6 +74,10 @@ def generate_report(
     logger.info(f"VAT: https://adisspr.mfcr.cz/pmd/epo/novy/DPH_DP3.")
 
     return totals
+
+
+def get_report_dir_name(config: Config) -> str:
+    return f"{config.output}/{config.period.year}_{config.period.month:02}"
 
 
 def _print_info(logger: Logger, period: Period, invoices: List[Invoice], expenses: List[Expense], totals: Totals,
