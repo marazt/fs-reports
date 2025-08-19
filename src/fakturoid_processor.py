@@ -1,3 +1,4 @@
+import json
 import math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -6,8 +7,9 @@ from typing import List, Optional
 import requests
 from requests.auth import _basic_auth_str
 
-from dtos import Period, Invoice, Expense
+from dtos import Period, Invoice, Expense, Config
 from processor import Processor
+from src.generator import get_report_dir_name
 
 
 # from requests.auth import basic_auth_str
@@ -41,6 +43,15 @@ class FakturoidProcessor(Processor):
     def process_expenses(self, period: Period) -> List[Expense]:
         data = self._get_all_expenses_for(period, self._auth)
         return FakturoidProcessor.transform_expenses(data)
+
+    def process_expenses_from_file(self, config: Config) -> List[Expense]:
+        try:
+            with open(f"{get_report_dir_name(config)}/expenses.json", "r") as f:
+                data: list[dict] = json.load(f)
+                return FakturoidProcessor.transform_expenses_from_file(data)
+        except Exception as ex:
+            print(f"Error reading expenses from file: {ex}")
+            return []
 
     def _get_url(self, auth: FakturoidAuth, suffix: str):
         return f"{self._accounts_url}/{auth.slug}/{suffix}"
@@ -109,6 +120,28 @@ class FakturoidProcessor(Processor):
                 html_url=expense["html_url"],
                 variable_symbol=expense["variable_symbol"],
                 vat_price_mode=expense["vat_price_mode"],
+            ) for expense in expenses
+        ]
+
+    @staticmethod
+    def transform_expenses_from_file(expenses: List[dict]) -> List[Expense]:
+        expenses = [
+            Expense(
+                document_type="",
+                due_on=datetime.strptime(expense["due_on"], "%Y-%m-%d"),
+                id="",
+                issued_on=datetime.strptime(expense["issued_on"], "%Y-%m-%d"),
+                original_number=expense["original_number"],
+                number="",
+                supplier_registration_number=expense["supplier_registration_number"],
+                supplier_vat_number=expense["supplier_vat_number"],
+                subtotal=math.ceil(float(expense["subtotal"])),
+                tax=math.ceil(float(expense["total"])) - math.ceil(float(expense["subtotal"])),
+                taxable_fulfillment_due=datetime.strptime(expense["taxable_fulfillment_due"], "%Y-%m-%d"),
+                total=math.ceil(float(expense["total"])),
+                html_url="",
+                variable_symbol=expense["variable_symbol"],
+                vat_price_mode="",
             ) for expense in expenses
         ]
 

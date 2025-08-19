@@ -30,7 +30,7 @@ def generate_report(
             raise Exception(
                 f"Client with VAT number {invoice.client_vat_number} not found in valid client VAT numbers.")
 
-    expenses = processor.process_expenses(period)
+    expenses = processor.process_expenses(period) + processor.process_expenses_from_file(config)
 
     for expense in expenses:
         if expense.supplier_vat_number not in valid_supplier_vat_numbers.keys():
@@ -47,6 +47,8 @@ def generate_report(
 
     signed_on = date.today().strftime("%d.%m.%Y")
     report_dir = get_report_dir_name(config)
+    logger.info(f"Reports saved into file://{report_dir}.")
+
     _save_report(report_dir, f"dphdp3_{period.year}_{period.month}m.xml",
                  jinja_env.get_template("dphdp3_template.xml").render(invoices=invoices,
                                                                       expenses=expenses,
@@ -69,7 +71,6 @@ def generate_report(
                                                                       account=config.account),
                  logger)
 
-    logger.info(f"Reports saved into file://{report_dir}.")
     logger.info(f"Control report: https://adisspr.mfcr.cz/pmd/epo/novy/DPH_KH1.")
     logger.info(f"VAT: https://adisspr.mfcr.cz/pmd/epo/novy/DPH_DP3.")
 

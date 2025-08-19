@@ -1,6 +1,7 @@
 from typing import List
 
 from dtos import Invoice, Expense, Period, Totals
+from src.dtos import Config
 
 
 class Processor:
@@ -22,6 +23,13 @@ class Processor:
         """
         Expenses processing
         :param period:
+        :return:
+        """
+
+    def process_expenses_from_file(self, config: Config) -> List[Expense]:
+        """
+        Expenses processing
+        :param config:
         :return:
         """
 
