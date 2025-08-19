@@ -1,0 +1,15 @@
+[
+  {
+    "id": "Company id, e.g., My Best Company",
+    "due_on": "2025-07-19 aka 'Datum splatnosti'",
+    "issued_on": "2025-07-05 aka 'Datum vystavení'",
+    "original_number": "Invoice number, e.g., 25010038",
+    "supplier_registration_number": "Supplier registration number, e.g., 12345678",
+    "supplier_vat_number": "Supplier VAT number, e.g., CZ12345678",
+    "subtotal": 22562,
+    "tax": 4738,
+    "taxable_fulfillment_due": "2025-07-05 aka 'Datum uskutečnění plnění'",
+    "total": 27300,
+    "variable_symbol": "25010038"
+  }
+]
