@@ -125,11 +125,11 @@ class FakturoidProcessor(Processor):
 
     @staticmethod
     def transform_expenses_from_file(expenses: List[dict]) -> List[Expense]:
-        expenses = [
+        return [
             Expense(
                 document_type="",
                 due_on=datetime.strptime(expense["due_on"], "%Y-%m-%d"),
-                id="",
+                id=expense["supplier_registration_number"] + "-" + expense["variable_symbol"],
                 issued_on=datetime.strptime(expense["issued_on"], "%Y-%m-%d"),
                 original_number=expense["original_number"],
                 number="",
